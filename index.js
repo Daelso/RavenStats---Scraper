@@ -147,7 +147,7 @@ const clean_up = () => {
     } else {
       files.forEach((file) => {
         const filePath = path.join(dirPath, file);
-        if (file !== ".gitignore" && file !== "formatted_lads.csv") {
+        if (file !== ".gitignore.txt" && file !== "formatted_lads.csv") {
           fs.unlink(filePath, (err) => {
             if (err) {
               console.error(`Error deleting file ${filePath}:`, err);
