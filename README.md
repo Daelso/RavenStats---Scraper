@@ -47,7 +47,18 @@ npm run full-scrape
 ```
 This will run a complete scrape of general, questions, coolstorium and showlads populating your output folder with the files but not parsing them.
 
-Give it about a minute and it will parse all of your data and spit out a formatted_lads.csv in the showlads_dump
+```bash
+npm run full-scrape-parse
+```
+
+This will run a complete scrape of general, questions, coolstorium and showlads populating your output folder with the files AND parsing them/cleaning up.
+
+```bash
+npm run parse
+```
+
+This will parse any of the files you have sitting in your output folder. Useful if you wanted to modify/add additional sourced data like pastebins manually after scraping.
+
     
 ## License
 
