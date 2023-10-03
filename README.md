@@ -36,6 +36,15 @@ File_dir refers to where you would like to export your contents to.
   npm install
 ```
 We use several dependencies so please install them before attempting to run the program.
+
+## How to Use
+Firstly, follow the installation steps above. Once everything is installed, open your terminal in the RavenStats folder and run:
+
+```bash
+  node index.js
+```
+
+Give it about a minute and it will parse all of your data and spit out a formatted_lads.csv in the showlads_dump
     
 ## License
 
