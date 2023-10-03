@@ -53,42 +53,84 @@ const filter_junk = () => {
         fs.unlink(filePath, (err) => {
           if (err) {
             console.error(`Error deleting file ${filePath}:`, err);
+            return;
           }
         });
       }
     });
+
+    //Now onto data sorting...
+    console.log("Files filtered, sorting data to csv...");
+    sort_data(txtFiles);
   });
 };
 
-// Example usage
-filter_junk();
+const sort_data = (txtFiles) => {
+  if (txtFiles.length === 0) {
+    return console.log("No text files found, exiting...");
+  }
 
-// // Step 1: Read the text file
-// fs.readFile("your_file.txt", "utf8", (err, data) => {
-//   if (err) {
-//     console.error("Error reading the file:", err);
-//     return;
-//   }
+  const formattedLads = []; //store our formatted boys for eventual CSVing
 
-//   // Step 2: Split the file content into lines
-//   const lines = data.split("\n");
+  console.log("Please be patient, sorting may take a minute or so...");
+  txtFiles.forEach((file) => {
+    const filePath = path.join(__dirname, "showlads_dump", file);
 
-//   // Step 3: Create an object to store unique entries and check for duplicates
-//   const uniqueEntries = {};
+    const data = fs.readFileSync(filePath, "utf8", (err, data) => {
+      if (err) {
+        console.error("Failed to read file: ", err);
+        return;
+      }
+    });
+    const lines = data.split("\n");
+    const bulletPointLines = lines.filter((line) => /^\s*•/.test(line));
 
-//   // Step 4: Iterate through lines and identify duplicates
-//   lines.forEach((line) => {
-//     line = line.trim(); // Remove extra spaces and newline characters
-//     if (line) {
-//       if (uniqueEntries[line]) {
-//         // Duplicate found
-//         console.log("Duplicate entry:", line);
-//       } else {
-//         // Add the entry to the object for future comparison
-//         uniqueEntries[line] = true;
-//       }
-//     }
-//   });
-// });
+    //regex for taking our bullet point lines and reformatting into csv
+    const regexWithRole = /^\s*•\s*(.*?)\((.*?)\)\s*:\s*(.*)/;
+    const regexWithoutRole = /^\s*•\s*(.*?)\s*:\s*(.*)/;
+
+    bulletPointLines.forEach((line) => {
+      const matchWithRole = line.match(regexWithRole);
+      const matchWithoutRole = line.match(regexWithoutRole);
+
+      if (matchWithRole) {
+        const [, char_name, role, ckey] = matchWithRole;
+        formattedLads.push(`${char_name},${role},${ckey.toLowerCase()}`);
+      } else if (matchWithoutRole) {
+        const [, char_name, ckey] = matchWithoutRole;
+        formattedLads.push(`${char_name},Unknown,${ckey.toLowerCase()}`);
+      } else {
+        return;
+      }
+    });
+  });
+  createCSVFile(formattedLads);
+};
+
+const createCSVFile = (formattedData) => {
+  const csvFilePath = path.join(
+    __dirname,
+    "showlads_dump",
+    "formatted_lads.csv"
+  );
+
+  const csvData = formattedData.join("\n");
+
+  // Check if the file exists, if not, create it
+  fs.access(csvFilePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      // File doesn't exist, create it and write the header
+      fs.writeFileSync(csvFilePath, "ckey,role,char_name\n", "utf8");
+    }
+
+    fs.writeFile(csvFilePath, csvData, "utf8", (err) => {
+      if (err) {
+        console.error("Error writing to CSV file:", err);
+      } else {
+        console.log("Lads properly sorted, thank you for your patience!");
+      }
+    });
+  });
+};
 
 generate_showlads();
