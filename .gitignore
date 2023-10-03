@@ -128,7 +128,3 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-
-# showlads dump folder
-showlads_dump/*
-!showlads_dump/
