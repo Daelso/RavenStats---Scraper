@@ -5,6 +5,8 @@ const path = require("path");
 const { spawn } = require("child_process");
 require("dotenv").config();
 
+//Array of showlad files
+
 const generate_showlads = () => {
   const dllPath = path.join(
     __dirname,
@@ -12,35 +14,54 @@ const generate_showlads = () => {
     "DiscordChatExporter.Cli.dll"
   );
 
-  const command = `dotnet "${dllPath}" export -t "${process.env.DISCORD_TOKEN}" -c 1099045055093821520 -f PlainText -o "${process.env.FILE_DIR}"`;
+  const command = `dotnet "${dllPath}" export -t "${process.env.DISCORD_TOKEN}" -c 1099045055093821520 -f PlainText -o "${process.env.FILE_DIR}" --media --media-dir "${process.env.FILE_DIR}"`;
 
   const childProcess = spawn(command, [], { shell: true, stdio: "inherit" });
 
   childProcess.on("exit", (code) => {
     if (code === 0) {
-      console.log("Command executed successfully.");
+      console.log("Lads rounded up...");
+      console.log("Filtering out non-text files...");
+      filter_junk();
     } else {
       console.error(`Error: Command exited with code ${code}`);
     }
   });
 };
 
-// const get_all_showlads = () => {
-//   const directoryPath = process.env.FILE_DIR;
+const filter_junk = () => {
+  const directoryPath = process.env.FILE_DIR;
 
-//   fs.readdir(directoryPath, (err, files) => {
-//     if (err) {
-//       console.error("Error reading directory:", err);
-//       return;
-//     }
+  fs.readdir(directoryPath, (err, files) => {
+    if (err) {
+      console.error("Error reading directory:", err);
+      return;
+    }
 
-//     // Filter out .txt files
-//     const txtFiles = files.filter((file) => path.extname(file) === ".txt");
+    // Filter out .txt files
+    const txtFiles = files.filter((file) => path.extname(file) === ".txt");
 
-//     // Now txtFiles array contains the names of all .txt files in the directory
-//     console.log("Found .txt files:", txtFiles);
-//   });
-// };
+    // Now txtFiles array contains the names of all .txt files in the directory
+    console.log("Found .txt files:", txtFiles);
+
+    // Remove files not in txtFiles array
+    files.forEach((file) => {
+      const filePath = path.join(directoryPath, file);
+
+      // Check if the file is not in txtFiles array
+      if (path.extname(file) !== ".txt" && !txtFiles.includes(file)) {
+        fs.unlink(filePath, (err) => {
+          if (err) {
+            console.error(`Error deleting file ${filePath}:`, err);
+          }
+        });
+      }
+    });
+  });
+};
+
+// Example usage
+filter_junk();
 
 // // Step 1: Read the text file
 // fs.readFile("your_file.txt", "utf8", (err, data) => {
