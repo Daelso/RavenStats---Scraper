@@ -6,6 +6,9 @@ Yet another goofy project for the SS13 server Lifeweb. This node.js project scan
 It is very likely that I will personally use this data for some APIs or to populate a DB, what you do with it is up to you.
 
 
+##Thank You!
+
+This project would not be possible without the DiscordChatExporter (It is seriously stupid hard to automate scraping discord channels, bless this dudes work) - https://github.com/Tyrrrz/DiscordChatExporter
 
 
 ## Disclaimer
