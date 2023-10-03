@@ -1,5 +1,10 @@
 {
   "dependencies": {
     "dotenv": "^16.3.1"
+  },
+  "scripts": {
+    "full-scrape": "node scraper.js",
+    "full-scrape-parse": "node scraper.js && node parser.js",
+    "parse": "node parser.js"
   }
 }
