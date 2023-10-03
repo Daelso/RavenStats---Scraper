@@ -130,4 +130,5 @@ dist
 .pnp.*
 
 # showlads dump folder
-showlads_dump/
+showlads_dump/*
+!showlads_dump/
