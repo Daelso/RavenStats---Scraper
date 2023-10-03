@@ -14,7 +14,7 @@ const generate_showlads = () => {
     "DiscordChatExporter.Cli.dll"
   );
 
-  const command = `dotnet "${dllPath}" export -t "${process.env.DISCORD_TOKEN}" -c 1099045055093821520 -f PlainText -o "${process.env.FILE_DIR}" --media --media-dir "${process.env.FILE_DIR}"`;
+  const command = `dotnet "${dllPath}" export -t "${process.env.DISCORD_TOKEN}" -c 1099045055093821520 -f PlainText -o "${process.env.FILE_DIR}/coolstorium.txt" --media --media-dir "${process.env.FILE_DIR}"`;
 
   const childProcess = spawn(command, [], { shell: true, stdio: "inherit" });
 
@@ -73,6 +73,7 @@ const sort_data = (txtFiles) => {
   const formattedLads = []; //store our formatted boys for eventual CSVing
 
   console.log("Please be patient, sorting may take a minute or so...");
+
   txtFiles.forEach((file) => {
     const filePath = path.join(__dirname, "showlads_dump", file);
 
@@ -82,18 +83,26 @@ const sort_data = (txtFiles) => {
         return;
       }
     });
+    //Date parsing is a bit fucky, for coolstorium text posts we go line by line and update the date as we find it. For text files, we can pull the metadata.
+    const curDate = null;
+
+    console.log(createdDate(filePath));
     const lines = data.split("\n");
+    // console.log(lines);
+    // return;
     const bulletPointLines = lines.filter((line) => /^\s*•/.test(line));
 
     //regex for taking our bullet point lines and reformatting into csv
     const regexWithRole = /^\s*•\s*(.*?)\((.*?)\)\s*:\s*(.*)/;
     const regexWithoutRole = /^\s*•\s*(.*?)\s*:\s*(.*)/;
+    const regexWaitress = /^\s*•\s*(.*?)\((.*?)\)\s*:\s*(.*)/; //Because randy put a /n in them for some fucking reason
 
     bulletPointLines.forEach((line) => {
       const matchWithRole = line.match(regexWithRole);
+      const matchWaitress = line.match(regexWaitress);
       const matchWithoutRole = line.match(regexWithoutRole);
 
-      if (matchWithRole) {
+      if (matchWithRole || matchWaitress) {
         const [, char_name, role, ckey] = matchWithRole;
         formattedLads.push(`${char_name},${role},${ckey.toLowerCase()}`);
       } else if (matchWithoutRole) {
@@ -134,6 +143,12 @@ const createCSVFile = (formattedData) => {
     });
     clean_up();
   });
+};
+
+const createdDate = (file) => {
+  const { birthtime } = fs.statSync(file);
+
+  return birthtime;
 };
 
 const clean_up = () => {
