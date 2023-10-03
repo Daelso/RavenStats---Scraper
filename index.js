@@ -117,20 +117,47 @@ const createCSVFile = (formattedData) => {
   const csvData = formattedData.join("\n");
 
   // Check if the file exists, if not, create it
-  fs.access(csvFilePath, fs.constants.F_OK, (err) => {
+  fs.access(csvFilePath, fs.constants.F_OK, async (err) => {
     if (err) {
       // File doesn't exist, create it and write the header
       fs.writeFileSync(csvFilePath, "ckey,role,char_name\n", "utf8");
     }
 
-    fs.writeFile(csvFilePath, csvData, "utf8", (err) => {
+    await fs.writeFile(csvFilePath, csvData, "utf8", (err) => {
       if (err) {
         console.error("Error writing to CSV file:", err);
       } else {
-        console.log("Lads properly sorted, thank you for your patience!");
+        console.log(
+          "Lads properly sorted, thank you for your patience, cleaning up..."
+        );
       }
     });
+    clean_up();
   });
+};
+
+const clean_up = () => {
+  // Delete every other file in the folder
+
+  const dirPath = path.join(__dirname, "showlads_dump");
+
+  fs.readdir(dirPath, (err, files) => {
+    if (err) {
+      console.error("Error reading directory:", err);
+    } else {
+      files.forEach((file) => {
+        const filePath = path.join(dirPath, file);
+        if (file !== ".gitignore" && file !== "formatted_lads.csv") {
+          fs.unlink(filePath, (err) => {
+            if (err) {
+              console.error(`Error deleting file ${filePath}:`, err);
+            }
+          });
+        }
+      });
+    }
+  });
+  console.log("All done, enjoy!");
 };
 
 generate_showlads();
