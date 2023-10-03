@@ -1,9 +1,11 @@
 
-# RavenStats
+# RavenStats Scraper
 
 Yet another goofy project for the SS13 server Lifeweb. This node.js project scans the Lifeweb discord for showlad entries and files, it then parses them down into usable data to generate a rough estimate of the amount of times a role has been played as well as providing user statistics. The final output will be a csv that is an amalgamation of both user posts and scraped text files containing much of the same data. The csv will be formatted for SQL or excel importing, so feel free to use whatever you like.
 
 It is very likely that I will personally use this data for some APIs or to populate a DB, what you do with it is up to you.
+
+This is not the web interface, this is just the data scraping and parsing tool.
 
 
 ## Thank You!
