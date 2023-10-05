@@ -4,7 +4,7 @@ const path = require("path");
 const createdDate = (file) => {
   const { birthtime } = fs.statSync(file);
 
-  return birthtime.toISOString();
+  return formatToMySQLDatetime(birthtime);
 };
 
 const getDates = (datetimeString) => {
@@ -75,9 +75,23 @@ const createCSVFile = (formattedData) => {
   });
 };
 
+function formatToMySQLDatetime(inputString) {
+  const inputDate = new Date(inputString); // Parse the input string
+  const year = inputDate.getFullYear();
+  const month = String(inputDate.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+  const day = String(inputDate.getDate()).padStart(2, "0");
+  const hours = String(inputDate.getHours()).padStart(2, "0");
+  const minutes = String(inputDate.getMinutes()).padStart(2, "0");
+  const seconds = String(inputDate.getSeconds()).padStart(2, "0");
+
+  const mysqlDatetimeString = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  return mysqlDatetimeString;
+}
+
 module.exports = {
   createdDate,
   getDates,
   clean_up,
   createCSVFile,
+  formatToMySQLDatetime,
 };

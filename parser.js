@@ -4,6 +4,7 @@ const {
   createdDate,
   getDates,
   createCSVFile,
+  formatToMySQLDatetime,
 } = require("./helper_functions.js");
 require("dotenv").config();
 
@@ -65,7 +66,12 @@ const sort_data = (txtFiles) => {
 
     //Date parsing is a bit fucky, for coolstorium text posts we go line by line and update the date as we find it. For text files, we can pull the metadata.
     let curDate = null;
-    const textFiles = ["showlads.txt"];
+    const textFiles = [
+      "showlads.txt",
+      "coolstorium.txt",
+      "questions.txt",
+      "general.txt",
+    ];
     const excludedFile = textFiles.includes(file);
 
     if (!excludedFile) {
@@ -92,7 +98,7 @@ const sort_data = (txtFiles) => {
         if (dateMatch) {
           const extractedDateTime = dateMatch ? dateMatch[1] : null;
 
-          curDate = getDates(extractedDateTime);
+          curDate = formatToMySQLDatetime(extractedDateTime);
         }
       }
 
