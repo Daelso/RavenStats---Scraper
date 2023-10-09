@@ -11,6 +11,8 @@ require("dotenv").config();
 
 //These are the parse functions, include some imports
 
+const ckey_exclusion = ["_matxh", "Obolont"];
+
 const filter_junk = () => {
   const directoryPath = process.env.FILE_DIR;
 
@@ -103,14 +105,30 @@ const sort_data = (txtFiles) => {
 
       if (matchWithRole || matchWaitress) {
         const [, char_name, role, ckey] = matchWithRole;
-        formattedLads.push(
-          `${char_name},${role},${ckey.toLowerCase().trim()},${curDate}`
-        );
+        if (!ckey_exclusion.includes(ckey.trim())) {
+          formattedLads.push(
+            `${char_name.trim()},${role.trim()},${ckey
+              .toLowerCase()
+              .trim()},${curDate}`
+          );
+        } else {
+          formattedLads.push(
+            `${char_name.trim()},${role.trim()},Anonymous,${curDate}`
+          );
+        }
       } else if (matchWithoutRole) {
         const [, char_name, ckey] = matchWithoutRole;
-        formattedLads.push(
-          `${char_name},Unknown,${ckey.toLowerCase().trim()},${curDate}`
-        );
+        if (!ckey_exclusion.includes(ckey.trim())) {
+          formattedLads.push(
+            `${char_name.trim()},Unknown,${ckey
+              .toLowerCase()
+              .trim()},${curDate}`
+          );
+        } else {
+          formattedLads.push(
+            `${char_name.trim()},Unknown,Anonymous,${curDate}`
+          );
+        }
       } else {
         return;
       }
