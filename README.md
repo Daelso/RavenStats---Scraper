@@ -45,7 +45,7 @@ Firstly, follow the installation steps above. Once everything is installed, you 
 ```bash
 npm run full-scrape
 ```
-This will run a complete scrape of general, questions, coolstorium and showlads populating your output folder with the files but not parsing them.
+This will run a complete scrape of general, questions, coolstorium and showlads populating your output folder with the files but not parsing them. Be aware this could take over 24 hrs.
 
 ```bash
 npm run full-scrape-parse
