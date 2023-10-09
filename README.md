@@ -7,6 +7,7 @@ It is very likely that I will personally use this data for some APIs or to popul
 
 This is not the web interface, this is just the data scraping and parsing tool.
 
+Works in tandem with the web interface: https://github.com/Daelso/RavenStats
 
 ## Thank You!
 
