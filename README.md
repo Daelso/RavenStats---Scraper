@@ -57,8 +57,17 @@ This will run a complete scrape of general, questions, coolstorium and showlads 
 npm run parse
 ```
 
-This will parse any of the files you have sitting in your output folder. Useful if you wanted to modify/add additional sourced data like pastebins manually after scraping.
+This will parse any of the files you have sitting in your output folder. Useful if you wanted to modify/add additional sourced data like pastebins manually after scraping or just wish to bundle up a few weeks worth. 
 
+```bash
+npm run weekly-scrape
+```
+This is intended to be run on Mondays, it will scrape from the previous Friday until Monday, effectively giving you that weekends showlads.
+
+```bash
+npm run weekly-scrape-parse
+```
+Scraped like above, calls the parse function immediately so your output is only the formatted CSV
     
 ## License
 
