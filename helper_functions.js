@@ -88,10 +88,35 @@ function formatToMySQLDatetime(inputString) {
   return mysqlDatetimeString;
 }
 
+function formatDatetime(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
+
+const getTodayAndFridayDate = () => {
+  const today = new Date();
+  const friday = new Date(today);
+
+  // Set the date to the previous Friday and set the time to 13:00
+  friday.setDate(friday.getDate() - 3);
+  friday.setHours(9, 0, 0, 0);
+
+  // Format the dates as 'YYYY-MM-DD HH:mm'
+  const formattedToday = today.toISOString().slice(0, 16).replace("T", " ");
+  const formattedFriday = friday.toISOString().slice(0, 16).replace("T", " ");
+
+  return { today: formattedToday, previousFriday: formattedFriday };
+};
+
 module.exports = {
   createdDate,
   getDates,
   clean_up,
   createCSVFile,
   formatToMySQLDatetime,
+  getTodayAndFridayDate,
 };

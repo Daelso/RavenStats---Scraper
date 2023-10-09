@@ -2,7 +2,6 @@ const fs = require("fs");
 const path = require("path");
 const {
   createdDate,
-  getDates,
   createCSVFile,
   formatToMySQLDatetime,
 } = require("./helper_functions.js");
