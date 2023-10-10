@@ -11,7 +11,7 @@ require("dotenv").config();
 
 //These are the parse functions, include some imports
 
-const ckey_exclusion = ["_matxh", "Obolont"];
+const ckey_exclusion = ["_matxh", "Obolont", "Cyrix01"];
 
 const filter_junk = () => {
   const directoryPath = process.env.FILE_DIR;
@@ -104,7 +104,11 @@ const sort_data = (txtFiles) => {
       }
 
       if (matchWithRole || matchWaitress) {
-        const [, char_name, role, ckey] = matchWithRole;
+        let [, char_name, role, ckey] = matchWithRole;
+        //Removes so and so's squire
+        if (role.includes("Squire")) {
+          role = "Squire";
+        }
         if (!ckey_exclusion.includes(ckey.trim())) {
           formattedLads.push(
             `${char_name.trim()},${role.trim()},${ckey
