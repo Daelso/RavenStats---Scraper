@@ -87,6 +87,7 @@ const sort_data = (txtFiles) => {
     const regexWithoutRole = /^\s*•\s*(.*?)\s*:\s*(.*)/;
     const regexWaitress = /^\s*•\s*(.*?)\((.*?)\)\s*:\s*(.*)/; //Because randy put a /n in them for some fucking reason
     const datePattern = /\[(\d{1,2}\/\d{1,2}\/\d{4} \d{1,2}:\d{2} (?:AM|PM))\]/;
+    const robotPattern = /^\s*[A-Z]{3}\d{3}\s*$/;
 
     bulletPointLines.forEach((line) => {
       const matchWithRole = line.match(regexWithRole);
@@ -105,10 +106,18 @@ const sort_data = (txtFiles) => {
 
       if (matchWithRole || matchWaitress) {
         let [, char_name, role, ckey] = matchWithRole;
+        const os13RobotMatch = robotPattern.test(role.trim());
+
+        //To get os13 robots more uniform
+        if (os13RobotMatch) {
+          role = "OS13 Robot";
+        }
+
         //Removes so and so's squire
         if (role.includes("Squire")) {
           role = "Squire";
         }
+
         if (!ckey_exclusion.includes(ckey.trim())) {
           formattedLads.push(
             `${char_name.trim()},${role.trim()},${ckey
