@@ -11,7 +11,7 @@ require("dotenv").config();
 
 //These are the parse functions, include some imports
 
-const ckey_exclusion = ["_matxh", "Obolont", "Cyrix01", "gb"];
+const ckey_exclusion = ["_matxh", "Obolont", "Cyrix01", "gb", "Cauldron"];
 
 const filter_junk = () => {
   const directoryPath = process.env.FILE_DIR;
