@@ -17,8 +17,8 @@ const ckey_exclusion = [
   "Cyrix01",
   "gb",
   "Cauldron",
-  "patternseeker",
-  "borntokill946",
+  "Patternseeker",
+  "Borntokill946",
 ];
 
 const filter_junk = () => {
